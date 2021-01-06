@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+		<link rel="stylesheet" type="text/css" href="static/model/css/style.css"/>
+		<style>
+			@media screen and (max-width:1920px){
+				.c1{ width: 1500px;height:700px;float:left }
+				.c2{ width: 500px;height:500px;float:left }
+			}
+			@media screen and (max-width:1200px){
+				.c1{ width: 100%;height:700px;float:left }
+				.c2{ width: 33%;height:300px;float:left } //屏幕宽度小于1200px时显示蓝色字体
+			}
+		</style>
+	</head>
+	<body>
+		<div id="header">
+			<ul class="nav">
+				<li><a href="index.html">模块一</a></li>
+				<li><a href="index2.html">模块二</a></li>
+				<li><a href="index3.html">模块三</a></li>
+			</ul>
+		</div>
+		<div id="chart1" class="c1"></div>
+		<div id="chart2" class="c2"></div>
+		<div id="chart3" class="c2"></div>
+		<div id="chart4" class="c2"></div>
+		<script src="static/model/js/echarts.min.js"></script>
+		<script src="static/model/js/jquery-2.1.1.min.js"></script>
+		<script>
+			var myChart1 = echarts.init(document.getElementById("chart1"));
+			var myChart2 = echarts.init(document.getElementById("chart2"));
+			var myChart3 = echarts.init(document.getElementById("chart3"));
+			var myChart4 = echarts.init(document.getElementById("chart4"));
+			//myChart1.showLoading();
+			$.get('overxktree.json', function(data) {
+				myChart1.hideLoading();
+
+				echarts.util.each(data.children, function(datum, index) {
+					index % 2 === 0 && (datum.collapsed = true);
+				});
+
+				myChart1.setOption(option = {
+					tooltip: {
+						trigger: 'item',
+						triggerOn: 'mousemove'
+					},
+					series: [{
+						type: 'tree',
+
+						data: [data],
+
+						top: '1%',
+						left: '7%',
+						bottom: '1%',
+						right: '20%',
+
+						symbolSize: 6,
+
+						label: {
+							normal: {
+								position: 'left',
+								verticalAlign: 'middle',
+								align: 'right',
+								fontSize: 10
+							}
+						},
+
+						leaves: {
+							label: {
+								normal: {
+									position: 'right',
+									verticalAlign: 'middle',
+									align: 'left'
+								}
+							}
+						},
+						expandAndCollapse: true,
+						animationDuration: 550,
+						animationDurationUpdate: 750
+					}]
+				});
+			});
+			
+			myChart2.setOption({
+				title: {
+					text: '政治',
+					subtext: '',
+					x: 'center'
+				},
+				tooltip: {
+					trigger: 'item',
+					formatter: "{a} <br/>{b} : {c} ({d}%)"
+				},
+				legend: {
+					orient: 'vertical',
+					left: 'left',
+					data: ['(111)单独考试思想政治理论','(199)管理类联考综合能力','(112)援藏计划思想政治理论','(101)思想政治理论']
+				},
+				series: [{
+					name: '科目',
+					type: 'pie',
+					radius: '55%',
+					center: ['50%', '60%'],
+					data: [
+						{value:1563,name:'(111)单独考试思想政治理论'},
+						{value:4174,name:'(199)管理类联考综合能力'},
+						{value:28,name:'(112)援藏计划思想政治理论'},
+						{value:142692,name:'(101)思想政治理论'}
+						
+					],
+					itemStyle: {
+						emphasis: {
+							shadowBlur: 10,
+							shadowOffsetX: 0,
+							shadowColor: 'rgba(0, 0, 0, 0.5)'
+						}
+					}
+				}]
+			}, true);
+			myChart3.setOption({
+				title: {
+					text: '外语',
+					subtext: '',
+					x: 'center'
+				},
+				tooltip: {
+					trigger: 'item',
+					formatter: "{a} <br/>{b} : {c} ({d}%)"
+				},
+				legend: {
+					orient: 'vertical',
+					left: 'left',
+					data: ['(201)英语一','(204)英语二','不考英语统考']
+				},
+				series: [{
+					name: '科目',
+					type: 'pie',
+					radius: '55%',
+					center: ['50%', '60%'],
+					data: [
+						
+						{value:116687,name:'(201)英语一'},
+						{value:28113,name:'(204)英语二'},
+						{value:4173,name:'不考英语统考'}
+					],
+					itemStyle: {
+						emphasis: {
+							shadowBlur: 10,
+							shadowOffsetX: 0,
+							shadowColor: 'rgba(0, 0, 0, 0.5)'
+						}
+					}
+				}]
+			}, true);
+			myChart4.setOption({
+				title: {
+					text: '数学',
+					subtext: '',
+					x: 'center'
+				},
+				tooltip: {
+					trigger: 'item',
+					formatter: "{a} <br/>{b} : {c} ({d}%)"
+				},
+				legend: {
+					orient: 'vertical',
+					left: 'left',
+					data: ['(301)数学一','(302)数学二','(303)数学三','不考数学统考']
+				},
+				series: [{
+					name: '科目',
+					type: 'pie',
+					radius: '55%',
+					center: ['50%', '60%'],
+					data: [
+						
+						{value:23543,name:'(301)数学一'},
+						{value:22430,name:'(302)数学二'},
+						{value:10148,name:'(303)数学三'},
+						{value:92999,name:'不考数学统考'}
+					],
+					itemStyle: {
+						emphasis: {
+							shadowBlur: 10,
+							shadowOffsetX: 0,
+							shadowColor: 'rgba(0, 0, 0, 0.5)'
+						}
+					}
+				}]
+			}, true);
+		</script>
+	</body>
+</html>

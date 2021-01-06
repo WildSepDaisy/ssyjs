@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+		<link rel="stylesheet" type="text/css" href="static/model/css/style.css"/>
+		<style>
+			@media screen and (max-width:1920px){
+				.c1{ width: 55%;height:670px;float:left }
+				.c2{ width: 45%;height:670px;float:left ;padding-left: -10%;}
+			}
+			@media screen and (max-width:1200px){
+				.c1{ width: 100%;height:670px; }
+				.c2{ width: 100%;height:670px; } //屏幕宽度小于1200px时显示蓝色字体
+			}
+		</style>
+	</head>
+	<body>
+		<div id="header">
+			<ul class="nav">
+				<li><a href="index.html">模块一</a></li>
+				<li><a href="index2.html">模块二</a></li>
+				<li><a href="index3.html">模块三</a></li>
+			</ul>
+		</div>
+		<div id="chart1" class="c1"></div>
+		<div id="chart2" class="c2"></div>
+		<script src="static/model/js/echarts.min.js"></script>
+		<script src="static/model/js/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="https://www.echartsjs.com/examples/vendors/echarts/map/js/china.js?_v_=1574101650733"></script>
+		<script>
+			var myChart1 = echarts.init(document.getElementById("chart1"));
+			var myChart2 = echarts.init(document.getElementById("chart2"));
+			var url = window.location.href;
+			var provinceList = []
+			var dmmcList = {}
+			var firstflag = 0;
+			function ishave(str) {
+				if (str > 0) {
+					return '√';
+				} else {
+					return '×';
+				}
+			}
+
+			function setChart1() {
+				var data = [];
+				console.log(provinceList)
+				for (var i = 0; i < provinceList.length; i++) {
+					data.push({
+						name: dmmcList[provinceList[i]['ssdm']],
+						value: provinceList[i]['schNum'],
+						yjsy: provinceList[i]['yjsyNum'],
+						zzhxyx: provinceList[i]['zzhxyxNum'],
+						bsd: provinceList[i]['bsdNum']
+					});
+				}
+				option = {
+					title: {
+						text: '全国硕士研究生招生院校分布',
+						subtext: '',
+						left: 'center'
+					},
+					tooltip: {
+						trigger: 'item',
+						formatter: function(param) {
+							return param.name + '<br/>共：' + param.value + ' 所院校<br/>含研究生院院校数：' + param.data.yjsy + '<br/>含自主招生院校数：' +
+								param.data.zzhxyx +
+								'<br/>含博士点院校数：' + param.data.bsd;
+						}
+					},
+					legend: {
+						orient: 'vertical',
+						left: 'left',
+						data: ['院校']
+					},
+					visualMap: {
+						min: 0,
+						max: 150,
+						left: 'left',
+						top: 'bottom',
+						text: ['多', '少'], // 文本，默认为数值文本
+						calculable: true
+					},
+					toolbox: {
+						show: true,
+						orient: 'vertical',
+						left: 'right',
+						feature: {
+							mark: {
+								show: true
+							},
+							restore: {
+								show: true
+							}
+						}
+					},
+					series: [{
+						name: '院校',
+						type: 'map',
+						mapType: 'china',
+						roam: false,
+						label: {
+							normal: {
+								show: false
+							},
+							emphasis: {
+								show: true
+							}
+						},
+						data: data
+					}]
+				};
+
+				myChart1.setOption(option, true);
+				
+			}
+
+			function setChart2(data, ssdm) {
+				var option = {
+					title: {
+						text: dmmcList[ssdm]+'考试科目数量前二十院校',
+						subtext: '',
+						left: 'center'
+					},
+					dataset: {
+						source: data
+					},
+					tooltip : {
+						trigger: 'axis',
+						axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+							type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+						},
+						formatter: function (params) {
+							var tar = params[0];
+							return tar.name + '<br/>' + '研究生院 : ' + tar.value[3] + '<br/>' + '自主划线院校 : ' + tar.value[4] + '<br/>' + '博士点 : ' + tar.value[5] + '<br/>' + '考试科目数 : ' + tar.value[6];
+						}
+					},
+					grid: {
+						containLabel: true
+					},
+					xAxis: {
+						name: '考试科目数'
+					},
+					yAxis: {
+						type: 'category'
+					},
+					visualMap: {
+						orient: 'horizontal',
+						left: 'center',
+						min: 0,
+						max: 3,
+						text: ['含研究生院、博士点且自主划线', '无研究生院、博士点且统一划线'],
+						// Map the score column to color
+						dimension: 0,
+						inRange: {
+							color: ['#fcf900', '#E15457']
+						}
+					},
+					series: [{
+						type: 'bar',
+						encode: {
+							// Map the "amount" column to X axis.
+							x: '考试科目数',
+							// Map the "product" column to Y axis
+							y: '学校名称'
+						}
+					}]
+				};
+				myChart2.clear();
+				myChart2.setOption(option, true);
+			}
+
+			function getProvince() {
+				$.ajax({
+					url: "/ssyjsdata/getProvincedata",
+					type: "GET",
+					dataType: "JSON",
+					success: function(data) {
+						provinceList = data.extend.provinceData;
+						var dmmc = data.extend.dmmc;
+						var datalist = [];
+						dmmcList = {};
+						for (var i = 0; i < dmmc.length; i++) {
+							dmmcList[dmmc[i]['dm']] = dmmc[i]['mc'];
+							dmmcList[dmmc[i]['mc']] = dmmc[i]['dm'];
+						}
+						setChart1();
+						if(firstflag==0){
+							getSchoolByProvince(dmmcList['上海']);
+							firstflag=1;
+						}
+						return;
+					},
+					error: function(err) {
+						console.log(err, "获取失败");
+						return;
+					}
+				});
+			}
+
+			function getSchoolByProvince(ssdm) {
+				$.ajax({
+					url: "/ssyjsdata/getSchoolByProvince?ssdm=" + ssdm,
+					type: "GET",
+					dataType: "JSON",
+					success: function(data) {
+						var dataset = data.extend.data;
+						//console.log(dataset);
+						var datalist = [
+							['合计','学校名称', '学校代码', '研究生院', '自主划线院校', '博士点', '考试科目数']
+						];
+
+						for (var i = 0; i < dataset.length; i++) {
+							datalist.push([
+								dataset[i]['yjsy'] + dataset[i]['zzhxyx'] + dataset[i]['bsd'],
+								dataset[i]['schmc'],
+								dataset[i]['schdm'],
+								ishave(dataset[i]['yjsy']),
+								ishave(dataset[i]['zzhxyx']),
+								ishave(dataset[i]['bsd']),
+								dataset[i]['kskmNum']
+							]);
+						}
+						setChart2(datalist,ssdm)
+						return;
+					},
+					error: function(err) {
+						console.log(err, "shop获取失败");
+						return;
+					}
+				});
+			}
+			getProvince()
+			
+			myChart1.on('click', function(params) {
+				console.log(params.name);
+				getSchoolByProvince(dmmcList[params.name]);
+			});
+		</script>
+	</body>
+</html>

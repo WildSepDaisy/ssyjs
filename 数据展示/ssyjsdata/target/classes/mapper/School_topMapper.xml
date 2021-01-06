@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yjs.dao.School_topMapper">
+  <resultMap id="BaseResultMap" type="com.yjs.bean.School_top">
+    <result column="schdm" jdbcType="VARCHAR" property="schdm" />
+    <result column="schmc" jdbcType="VARCHAR" property="schmc" />
+    <result column="ssdm" jdbcType="VARCHAR" property="ssdm" />
+    <result column="yjsy" jdbcType="INTEGER" property="yjsy" />
+    <result column="zzhxyx" jdbcType="INTEGER" property="zzhxyx" />
+    <result column="bsd" jdbcType="INTEGER" property="bsd" />
+    <result column="kskm_num" jdbcType="INTEGER" property="kskmNum" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    schdm, schmc, ssdm, yjsy, zzhxyx, bsd, kskm_num
+  </sql>
+  <select id="selectByExample" parameterType="com.yjs.bean.School_topExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from school_top
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.yjs.bean.School_topExample">
+    delete from school_top
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yjs.bean.School_top">
+    insert into school_top (schdm, schmc, ssdm, 
+      yjsy, zzhxyx, bsd, 
+      kskm_num)
+    values (#{schdm,jdbcType=VARCHAR}, #{schmc,jdbcType=VARCHAR}, #{ssdm,jdbcType=VARCHAR}, 
+      #{yjsy,jdbcType=INTEGER}, #{zzhxyx,jdbcType=INTEGER}, #{bsd,jdbcType=INTEGER}, 
+      #{kskmNum,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yjs.bean.School_top">
+    insert into school_top
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="schdm != null">
+        schdm,
+      </if>
+      <if test="schmc != null">
+        schmc,
+      </if>
+      <if test="ssdm != null">
+        ssdm,
+      </if>
+      <if test="yjsy != null">
+        yjsy,
+      </if>
+      <if test="zzhxyx != null">
+        zzhxyx,
+      </if>
+      <if test="bsd != null">
+        bsd,
+      </if>
+      <if test="kskmNum != null">
+        kskm_num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="schdm != null">
+        #{schdm,jdbcType=VARCHAR},
+      </if>
+      <if test="schmc != null">
+        #{schmc,jdbcType=VARCHAR},
+      </if>
+      <if test="ssdm != null">
+        #{ssdm,jdbcType=VARCHAR},
+      </if>
+      <if test="yjsy != null">
+        #{yjsy,jdbcType=INTEGER},
+      </if>
+      <if test="zzhxyx != null">
+        #{zzhxyx,jdbcType=INTEGER},
+      </if>
+      <if test="bsd != null">
+        #{bsd,jdbcType=INTEGER},
+      </if>
+      <if test="kskmNum != null">
+        #{kskmNum,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yjs.bean.School_topExample" resultType="java.lang.Long">
+    select count(*) from school_top
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update school_top
+    <set>
+      <if test="record.schdm != null">
+        schdm = #{record.schdm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.schmc != null">
+        schmc = #{record.schmc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ssdm != null">
+        ssdm = #{record.ssdm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.yjsy != null">
+        yjsy = #{record.yjsy,jdbcType=INTEGER},
+      </if>
+      <if test="record.zzhxyx != null">
+        zzhxyx = #{record.zzhxyx,jdbcType=INTEGER},
+      </if>
+      <if test="record.bsd != null">
+        bsd = #{record.bsd,jdbcType=INTEGER},
+      </if>
+      <if test="record.kskmNum != null">
+        kskm_num = #{record.kskmNum,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update school_top
+    set schdm = #{record.schdm,jdbcType=VARCHAR},
+      schmc = #{record.schmc,jdbcType=VARCHAR},
+      ssdm = #{record.ssdm,jdbcType=VARCHAR},
+      yjsy = #{record.yjsy,jdbcType=INTEGER},
+      zzhxyx = #{record.zzhxyx,jdbcType=INTEGER},
+      bsd = #{record.bsd,jdbcType=INTEGER},
+      kskm_num = #{record.kskmNum,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

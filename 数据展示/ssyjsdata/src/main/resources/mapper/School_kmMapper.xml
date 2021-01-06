@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yjs.dao.School_kmMapper">
+  <resultMap id="BaseResultMap" type="com.yjs.bean.School_km">
+    <result column="schdm" jdbcType="VARCHAR" property="schdm" />
+    <result column="schmc" jdbcType="VARCHAR" property="schmc" />
+    <result column="kskm_num" jdbcType="INTEGER" property="kskmNum" />
+    <result column="ratio" jdbcType="DOUBLE" property="ratio" />
+    <result column="kmdm" jdbcType="VARCHAR" property="kmdm" />
+    <result column="km01" jdbcType="INTEGER" property="km01" />
+    <result column="km02" jdbcType="INTEGER" property="km02" />
+    <result column="km03" jdbcType="INTEGER" property="km03" />
+    <result column="km04" jdbcType="INTEGER" property="km04" />
+    <result column="km05" jdbcType="INTEGER" property="km05" />
+    <result column="km06" jdbcType="INTEGER" property="km06" />
+    <result column="km07" jdbcType="INTEGER" property="km07" />
+    <result column="km08" jdbcType="INTEGER" property="km08" />
+    <result column="km09" jdbcType="INTEGER" property="km09" />
+    <result column="km10" jdbcType="INTEGER" property="km10" />
+    <result column="km11" jdbcType="INTEGER" property="km11" />
+    <result column="km12" jdbcType="INTEGER" property="km12" />
+    <result column="km13" jdbcType="INTEGER" property="km13" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    schdm, schmc, kskm_num, ratio, kmdm, km01, km02, km03, km04, km05, km06, km07, km08, 
+    km09, km10, km11, km12, km13
+  </sql>
+  <select id="selectByExample" parameterType="com.yjs.bean.School_kmExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from school_km
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.yjs.bean.School_kmExample">
+    delete from school_km
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yjs.bean.School_km">
+    insert into school_km (schdm, schmc, kskm_num, 
+      ratio, kmdm, km01, km02, 
+      km03, km04, km05, km06, 
+      km07, km08, km09, km10, 
+      km11, km12, km13)
+    values (#{schdm,jdbcType=VARCHAR}, #{schmc,jdbcType=VARCHAR}, #{kskmNum,jdbcType=INTEGER}, 
+      #{ratio,jdbcType=DOUBLE}, #{kmdm,jdbcType=VARCHAR}, #{km01,jdbcType=INTEGER}, #{km02,jdbcType=INTEGER}, 
+      #{km03,jdbcType=INTEGER}, #{km04,jdbcType=INTEGER}, #{km05,jdbcType=INTEGER}, #{km06,jdbcType=INTEGER}, 
+      #{km07,jdbcType=INTEGER}, #{km08,jdbcType=INTEGER}, #{km09,jdbcType=INTEGER}, #{km10,jdbcType=INTEGER}, 
+      #{km11,jdbcType=INTEGER}, #{km12,jdbcType=INTEGER}, #{km13,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yjs.bean.School_km">
+    insert into school_km
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="schdm != null">
+        schdm,
+      </if>
+      <if test="schmc != null">
+        schmc,
+      </if>
+      <if test="kskmNum != null">
+        kskm_num,
+      </if>
+      <if test="ratio != null">
+        ratio,
+      </if>
+      <if test="kmdm != null">
+        kmdm,
+      </if>
+      <if test="km01 != null">
+        km01,
+      </if>
+      <if test="km02 != null">
+        km02,
+      </if>
+      <if test="km03 != null">
+        km03,
+      </if>
+      <if test="km04 != null">
+        km04,
+      </if>
+      <if test="km05 != null">
+        km05,
+      </if>
+      <if test="km06 != null">
+        km06,
+      </if>
+      <if test="km07 != null">
+        km07,
+      </if>
+      <if test="km08 != null">
+        km08,
+      </if>
+      <if test="km09 != null">
+        km09,
+      </if>
+      <if test="km10 != null">
+        km10,
+      </if>
+      <if test="km11 != null">
+        km11,
+      </if>
+      <if test="km12 != null">
+        km12,
+      </if>
+      <if test="km13 != null">
+        km13,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="schdm != null">
+        #{schdm,jdbcType=VARCHAR},
+      </if>
+      <if test="schmc != null">
+        #{schmc,jdbcType=VARCHAR},
+      </if>
+      <if test="kskmNum != null">
+        #{kskmNum,jdbcType=INTEGER},
+      </if>
+      <if test="ratio != null">
+        #{ratio,jdbcType=DOUBLE},
+      </if>
+      <if test="kmdm != null">
+        #{kmdm,jdbcType=VARCHAR},
+      </if>
+      <if test="km01 != null">
+        #{km01,jdbcType=INTEGER},
+      </if>
+      <if test="km02 != null">
+        #{km02,jdbcType=INTEGER},
+      </if>
+      <if test="km03 != null">
+        #{km03,jdbcType=INTEGER},
+      </if>
+      <if test="km04 != null">
+        #{km04,jdbcType=INTEGER},
+      </if>
+      <if test="km05 != null">
+        #{km05,jdbcType=INTEGER},
+      </if>
+      <if test="km06 != null">
+        #{km06,jdbcType=INTEGER},
+      </if>
+      <if test="km07 != null">
+        #{km07,jdbcType=INTEGER},
+      </if>
+      <if test="km08 != null">
+        #{km08,jdbcType=INTEGER},
+      </if>
+      <if test="km09 != null">
+        #{km09,jdbcType=INTEGER},
+      </if>
+      <if test="km10 != null">
+        #{km10,jdbcType=INTEGER},
+      </if>
+      <if test="km11 != null">
+        #{km11,jdbcType=INTEGER},
+      </if>
+      <if test="km12 != null">
+        #{km12,jdbcType=INTEGER},
+      </if>
+      <if test="km13 != null">
+        #{km13,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yjs.bean.School_kmExample" resultType="java.lang.Long">
+    select count(*) from school_km
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update school_km
+    <set>
+      <if test="record.schdm != null">
+        schdm = #{record.schdm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.schmc != null">
+        schmc = #{record.schmc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.kskmNum != null">
+        kskm_num = #{record.kskmNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.ratio != null">
+        ratio = #{record.ratio,jdbcType=DOUBLE},
+      </if>
+      <if test="record.kmdm != null">
+        kmdm = #{record.kmdm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.km01 != null">
+        km01 = #{record.km01,jdbcType=INTEGER},
+      </if>
+      <if test="record.km02 != null">
+        km02 = #{record.km02,jdbcType=INTEGER},
+      </if>
+      <if test="record.km03 != null">
+        km03 = #{record.km03,jdbcType=INTEGER},
+      </if>
+      <if test="record.km04 != null">
+        km04 = #{record.km04,jdbcType=INTEGER},
+      </if>
+      <if test="record.km05 != null">
+        km05 = #{record.km05,jdbcType=INTEGER},
+      </if>
+      <if test="record.km06 != null">
+        km06 = #{record.km06,jdbcType=INTEGER},
+      </if>
+      <if test="record.km07 != null">
+        km07 = #{record.km07,jdbcType=INTEGER},
+      </if>
+      <if test="record.km08 != null">
+        km08 = #{record.km08,jdbcType=INTEGER},
+      </if>
+      <if test="record.km09 != null">
+        km09 = #{record.km09,jdbcType=INTEGER},
+      </if>
+      <if test="record.km10 != null">
+        km10 = #{record.km10,jdbcType=INTEGER},
+      </if>
+      <if test="record.km11 != null">
+        km11 = #{record.km11,jdbcType=INTEGER},
+      </if>
+      <if test="record.km12 != null">
+        km12 = #{record.km12,jdbcType=INTEGER},
+      </if>
+      <if test="record.km13 != null">
+        km13 = #{record.km13,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update school_km
+    set schdm = #{record.schdm,jdbcType=VARCHAR},
+      schmc = #{record.schmc,jdbcType=VARCHAR},
+      kskm_num = #{record.kskmNum,jdbcType=INTEGER},
+      ratio = #{record.ratio,jdbcType=DOUBLE},
+      kmdm = #{record.kmdm,jdbcType=VARCHAR},
+      km01 = #{record.km01,jdbcType=INTEGER},
+      km02 = #{record.km02,jdbcType=INTEGER},
+      km03 = #{record.km03,jdbcType=INTEGER},
+      km04 = #{record.km04,jdbcType=INTEGER},
+      km05 = #{record.km05,jdbcType=INTEGER},
+      km06 = #{record.km06,jdbcType=INTEGER},
+      km07 = #{record.km07,jdbcType=INTEGER},
+      km08 = #{record.km08,jdbcType=INTEGER},
+      km09 = #{record.km09,jdbcType=INTEGER},
+      km10 = #{record.km10,jdbcType=INTEGER},
+      km11 = #{record.km11,jdbcType=INTEGER},
+      km12 = #{record.km12,jdbcType=INTEGER},
+      km13 = #{record.km13,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+		<link rel="stylesheet" type="text/css" href="static/model/css/style.css"/>
+		<style>
+			@media screen and (max-width:1920px){
+				.c1{ width: 40%;height:600px;float:left }
+				.c2{ width: 30%;height:600px;float:left }
+				.c3{ width: 30%;height:600px;float:left }
+			}
+			@media screen and (max-width:1200px){
+				.c1{ width: 40%;height:600px;float:left }
+				.c2{ width: 30%;height:600px;float:left }
+				.c3{ width: 30%;height:600px;float:left }
+			}
+		</style>
+	</head>
+	<body>
+		<div id="header">
+			<ul class="nav">
+				<li><a href="index.html">模块一</a></li>
+				<li><a href="index2.html">模块二</a></li>
+				<li><a href="index3.html">模块三</a></li>
+			</ul>
+		</div>
+		<div id="chart1" style="" class="c1"></div>
+		<div id="chart2" style="" class="c2"></div>
+		<div id="chart3" style="" class="c3"></div>
+		<script src="static/model/js/echarts.min.js"></script>
+		<script src="static/model/js/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="https://www.echartsjs.com/examples/vendors/echarts/map/js/china.js?_v_=1574101650733"></script>
+		<script>
+			var myChart1 = echarts.init(document.getElementById("chart1"));
+			var myChart2 = echarts.init(document.getElementById("chart2"));
+			var myChart3 = echarts.init(document.getElementById("chart3"));
+			var url = window.location.href;
+			var xkdict = {
+				'01': '哲学',
+				'02': '经济学',
+				'03': '法学',
+				'04': '教育学',
+				'05': '文学',
+				'06': '历史学',
+				'07': '理学',
+				'08': '工学',
+				'09': '农学',
+				'10': '医学',
+				'11': '军事学',
+				'12': '管理学',
+				'13': '艺术学',
+				'哲学':'01',
+				'经济学':'02',
+				'法学':'03',
+				'教育学':'04',
+				'文学':'05',
+				'历史学':'06',
+				'理学':'07',
+				'工学':'08',
+				'农学':'09',
+				'医学':'10',
+				'军事学':'11',
+				'管理学':'12',
+				'艺术学':'13'
+			}
+			var kmNum = []
+			var schooldata = []
+			var firstflag=0;
+			function setChart1(dataset,datahead) {
+				option = {
+					title: {
+						text: '全国硕士研究生招生院校学科占比',
+						subtext: '',
+						x: 'center'
+					},
+					tooltip: {
+						trigger: 'item',
+						formatter: "{a} <br/>{b} : {c} ({d}%)"
+					},
+					legend: {
+						orient: 'vertical',
+						left: 'left',
+						data: datahead
+					},
+					series: [{
+						name: '学科',
+						type: 'pie',
+						radius: '55%',
+						center: ['50%', '60%'],
+						data: dataset,
+						itemStyle: {
+							emphasis: {
+								shadowBlur: 10,
+								shadowOffsetX: 0,
+								shadowColor: 'rgba(0, 0, 0, 0.5)'
+							}
+						}
+					}]
+				};
+				myChart1.setOption(option, true);
+			}
+			function setChart2(data, xkdm) {
+				var option = {
+					title: {
+						text: xkdict[xkdm]+'学科考试科目数前十院校',
+						subtext: '',
+						left: 'center'
+					},
+					dataset: {
+						source: data
+					},
+					tooltip : {
+						trigger: 'axis',
+						axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+							type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+						},
+						formatter: function (params) {
+							var tar = params[0];
+							return tar.name + '<br/>' + '占有率 : ' + tar.value[0] + '%<br/>' + '考试科目数 : ' + tar.value[3];
+						}
+					},
+					grid: {
+						containLabel: true
+					},
+					xAxis: {
+						name: '科目数'
+					},
+					yAxis: {
+						type: 'category'
+					},
+					visualMap: {
+						orient: 'horizontal',
+						left: 'center',
+						min: 50,
+						max: 100,
+						text: ['占比高', '占比低'],
+						// Map the score column to color
+						dimension: 0,
+						inRange: {
+							color: ['#fcf900', '#E15457']
+						}
+					},
+					series: [{
+						type: 'bar',
+						encode: {
+							// Map the "amount" column to X axis.
+							x: '考试科目数',
+							// Map the "product" column to Y axis
+							y: '学校名称'
+						}
+					}]
+				};
+				myChart2.clear();
+				myChart2.setOption(option, true);
+			}
+			function setChart3(schmc){
+				var data = [];
+				for(var i=0;i<schooldata.length;i++){
+					if(schooldata[i]['schmc']==schmc){
+						data = schooldata[i];
+						break;
+					}
+				}
+				var dataset = [];
+				var datahead = [];
+				for(var i=1;i<=9;i++){
+					if(data['km0'+i.toString()]!=0){
+						dataset.push({
+							name:xkdict['0'+i.toString()],
+							value:data['km0'+i.toString()]
+						});
+						datahead.push('0'+i.toString());
+					}
+				}
+				for(var i=10;i<=13;i++){
+					if(data['km'+i.toString()]!=0){
+						dataset.push({
+							name:xkdict[i.toString()],
+							value:data['km'+i.toString()]
+						});
+						datahead.push(i.toString());
+					}
+				}
+				
+				option = {
+					title: {
+						text: data['schmc']+'学科占比',
+						subtext: '',
+						x: 'center'
+					},
+					tooltip: {
+						trigger: 'item',
+						formatter: "{a} <br/>{b} : {c} ({d}%)"
+					},
+					legend: {
+						orient: 'vertical',
+						left: 'left',
+						data: datahead
+					},
+					series: [{
+						name: '学科',
+						type: 'pie',
+						radius: '55%',
+						center: ['50%', '60%'],
+						data: dataset,
+						itemStyle: {
+							emphasis: {
+								shadowBlur: 10,
+								shadowOffsetX: 0,
+								shadowColor: 'rgba(0, 0, 0, 0.5)'
+							}
+						}
+					}]
+				};
+				myChart3.clear();
+				myChart3.setOption(option, true);
+				
+			}
+			function getXKnum(){
+				$.ajax({
+					url: "/ssyjsdata/getKMdata",
+					type: "GET",
+					dataType: "JSON",
+					success: function(data) {
+						kmNum = data.extend.data;
+						var dataset = [];
+						var datahead = [];
+						for(var i=0;i<kmNum.length;i++){
+							dataset.push({
+								name:xkdict[kmNum[i]['kmdm']],
+								value:kmNum[i]['kskmNum']
+							});
+							datahead.push(xkdict[kmNum[i]['dm']]);
+						}
+						
+						setChart1(dataset,datahead);
+						if(firstflag==0){
+							getSchoolByKm('11');
+							firstflag=1;
+						}
+						return;
+					},
+					error: function(err) {
+						console.log(err, "获取失败");
+						return;
+					}
+				});
+			}
+			function getSchoolByKm(xkdm){
+				$.ajax({
+					url: "/ssyjsdata/getSchoolByKM?kmdm=" + xkdm,
+					type: "GET",
+					dataType: "JSON",
+					success: function(data) {
+						schooldata = data.extend.data;
+						var datalist = [
+							['该学科占有率','学校名称', '学校代码', '考试科目数']
+						];
+				
+						for (var i = 0; i < schooldata.length; i++) {
+							datalist.push([
+								schooldata[i]['ratio']*100,
+								schooldata[i]['schmc'],
+								schooldata[i]['schdm'],
+								schooldata[i]['kskmNum']
+							]);
+						}
+						setChart2(datalist,xkdm)
+						setChart3(schooldata[0]['schmc'])
+						return;
+					},
+					error: function(err) {
+						console.log(err, "shop获取失败");
+						return;
+					}
+				});
+			}
+
+			getXKnum()
+			//getSchoolByKm('01')
+			myChart1.on('click', function(params) {
+				console.log(params.name);
+				getSchoolByKm(xkdict[params.name]);
+			});
+			myChart2.on('click', function(params) {
+				console.log(params.name);
+				setChart3(params.name);
+			});
+		</script>
+
+	</body>
+</html>
